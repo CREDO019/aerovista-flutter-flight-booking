@@ -1,0 +1,29 @@
+name: aerovista
+description: "AeroVista - fictional premium global flight booking concept for portfolio and LinkedIn."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_animate: ^4.5.0
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/destinations/
+    - assets/globe/
+  shaders:
+    - shaders/premium_globe.frag

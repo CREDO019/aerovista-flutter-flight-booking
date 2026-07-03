@@ -1,0 +1,636 @@
+import 'world_projection.dart';
+
+enum GlobeRegion {
+  europe,
+  asia,
+  africa,
+  northAmerica,
+  southAmerica,
+  middleEast,
+  turkey,
+  polar,
+  oceania,
+}
+
+class GlobeMapPolygon {
+  const GlobeMapPolygon({
+    required this.name,
+    required this.region,
+    required this.points,
+  });
+
+  final String name;
+  final GlobeRegion region;
+  final List<GlobeGeoPoint> points;
+}
+
+class GlobeMapLine {
+  const GlobeMapLine({
+    required this.name,
+    required this.region,
+    required this.points,
+  });
+
+  final String name;
+  final GlobeRegion region;
+  final List<GlobeGeoPoint> points;
+}
+
+class WorldMapData {
+  WorldMapData._();
+
+  static const List<GlobeMapPolygon> continents = [
+    GlobeMapPolygon(
+      name: 'North America mainland',
+      region: GlobeRegion.northAmerica,
+      points: [
+        GlobeGeoPoint(72, -166),
+        GlobeGeoPoint(70, -149),
+        GlobeGeoPoint(62, -141),
+        GlobeGeoPoint(58, -134),
+        GlobeGeoPoint(52, -128),
+        GlobeGeoPoint(46, -124),
+        GlobeGeoPoint(38, -122),
+        GlobeGeoPoint(32, -117),
+        GlobeGeoPoint(27, -112),
+        GlobeGeoPoint(23, -106),
+        GlobeGeoPoint(19, -99),
+        GlobeGeoPoint(15, -94),
+        GlobeGeoPoint(14, -88),
+        GlobeGeoPoint(9, -82),
+        GlobeGeoPoint(13, -78),
+        GlobeGeoPoint(20, -82),
+        GlobeGeoPoint(25, -80),
+        GlobeGeoPoint(31, -81),
+        GlobeGeoPoint(36, -76),
+        GlobeGeoPoint(41, -71),
+        GlobeGeoPoint(47, -66),
+        GlobeGeoPoint(52, -58),
+        GlobeGeoPoint(58, -60),
+        GlobeGeoPoint(63, -68),
+        GlobeGeoPoint(68, -82),
+        GlobeGeoPoint(72, -101),
+        GlobeGeoPoint(75, -121),
+        GlobeGeoPoint(74, -145),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Greenland',
+      region: GlobeRegion.polar,
+      points: [
+        GlobeGeoPoint(83, -70),
+        GlobeGeoPoint(80, -39),
+        GlobeGeoPoint(74, -18),
+        GlobeGeoPoint(66, -26),
+        GlobeGeoPoint(61, -43),
+        GlobeGeoPoint(63, -58),
+        GlobeGeoPoint(72, -73),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'South America mainland',
+      region: GlobeRegion.southAmerica,
+      points: [
+        GlobeGeoPoint(12, -81),
+        GlobeGeoPoint(8, -73),
+        GlobeGeoPoint(5, -62),
+        GlobeGeoPoint(1, -50),
+        GlobeGeoPoint(-6, -38),
+        GlobeGeoPoint(-14, -39),
+        GlobeGeoPoint(-22, -43),
+        GlobeGeoPoint(-31, -50),
+        GlobeGeoPoint(-41, -58),
+        GlobeGeoPoint(-55, -69),
+        GlobeGeoPoint(-47, -73),
+        GlobeGeoPoint(-36, -72),
+        GlobeGeoPoint(-25, -70),
+        GlobeGeoPoint(-15, -75),
+        GlobeGeoPoint(-5, -79),
+        GlobeGeoPoint(3, -80),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Europe mainland',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(71, -10),
+        GlobeGeoPoint(69, 4),
+        GlobeGeoPoint(65, 15),
+        GlobeGeoPoint(61, 24),
+        GlobeGeoPoint(56, 31),
+        GlobeGeoPoint(50, 31),
+        GlobeGeoPoint(46, 28),
+        GlobeGeoPoint(43, 23),
+        GlobeGeoPoint(40, 19),
+        GlobeGeoPoint(37, 17),
+        GlobeGeoPoint(36, 10),
+        GlobeGeoPoint(38, 2),
+        GlobeGeoPoint(43, -4),
+        GlobeGeoPoint(49, -8),
+        GlobeGeoPoint(55, -6),
+        GlobeGeoPoint(61, -2),
+        GlobeGeoPoint(66, -4),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Iberia',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(44, -9),
+        GlobeGeoPoint(43, 3),
+        GlobeGeoPoint(39, 3),
+        GlobeGeoPoint(36, -5),
+        GlobeGeoPoint(37, -9),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Italy',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(47, 7),
+        GlobeGeoPoint(45, 12),
+        GlobeGeoPoint(42, 14),
+        GlobeGeoPoint(39, 16),
+        GlobeGeoPoint(38, 13),
+        GlobeGeoPoint(42, 10),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'British Isles',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(59, -7),
+        GlobeGeoPoint(57, -2),
+        GlobeGeoPoint(53, 1),
+        GlobeGeoPoint(50, -3),
+        GlobeGeoPoint(52, -7),
+        GlobeGeoPoint(55, -9),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Scandinavia',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(71, 17),
+        GlobeGeoPoint(69, 31),
+        GlobeGeoPoint(63, 30),
+        GlobeGeoPoint(58, 20),
+        GlobeGeoPoint(59, 10),
+        GlobeGeoPoint(64, 7),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Africa mainland',
+      region: GlobeRegion.africa,
+      points: [
+        GlobeGeoPoint(36, -17),
+        GlobeGeoPoint(35, -5),
+        GlobeGeoPoint(32, 12),
+        GlobeGeoPoint(30, 25),
+        GlobeGeoPoint(27, 34),
+        GlobeGeoPoint(18, 39),
+        GlobeGeoPoint(11, 43),
+        GlobeGeoPoint(2, 42),
+        GlobeGeoPoint(-8, 39),
+        GlobeGeoPoint(-18, 34),
+        GlobeGeoPoint(-28, 27),
+        GlobeGeoPoint(-35, 20),
+        GlobeGeoPoint(-34, 16),
+        GlobeGeoPoint(-25, 13),
+        GlobeGeoPoint(-15, 12),
+        GlobeGeoPoint(-5, 10),
+        GlobeGeoPoint(5, 5),
+        GlobeGeoPoint(12, -6),
+        GlobeGeoPoint(22, -16),
+        GlobeGeoPoint(30, -13),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Madagascar',
+      region: GlobeRegion.africa,
+      points: [
+        GlobeGeoPoint(-12, 49),
+        GlobeGeoPoint(-18, 50),
+        GlobeGeoPoint(-25, 47),
+        GlobeGeoPoint(-21, 44),
+        GlobeGeoPoint(-14, 46),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Asia mainland',
+      region: GlobeRegion.asia,
+      points: [
+        GlobeGeoPoint(72, 32),
+        GlobeGeoPoint(73, 55),
+        GlobeGeoPoint(70, 82),
+        GlobeGeoPoint(66, 108),
+        GlobeGeoPoint(60, 134),
+        GlobeGeoPoint(51, 157),
+        GlobeGeoPoint(44, 150),
+        GlobeGeoPoint(37, 141),
+        GlobeGeoPoint(31, 126),
+        GlobeGeoPoint(23, 116),
+        GlobeGeoPoint(15, 107),
+        GlobeGeoPoint(8, 101),
+        GlobeGeoPoint(7, 91),
+        GlobeGeoPoint(14, 82),
+        GlobeGeoPoint(20, 72),
+        GlobeGeoPoint(24, 60),
+        GlobeGeoPoint(29, 49),
+        GlobeGeoPoint(36, 39),
+        GlobeGeoPoint(43, 31),
+        GlobeGeoPoint(52, 36),
+        GlobeGeoPoint(61, 43),
+        GlobeGeoPoint(68, 41),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Anatolia and Levant',
+      region: GlobeRegion.middleEast,
+      points: [
+        GlobeGeoPoint(42, 25),
+        GlobeGeoPoint(40, 36),
+        GlobeGeoPoint(35, 43),
+        GlobeGeoPoint(31, 51),
+        GlobeGeoPoint(27, 56),
+        GlobeGeoPoint(22, 60),
+        GlobeGeoPoint(15, 56),
+        GlobeGeoPoint(12, 47),
+        GlobeGeoPoint(16, 40),
+        GlobeGeoPoint(24, 35),
+        GlobeGeoPoint(34, 28),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Arabian Peninsula',
+      region: GlobeRegion.middleEast,
+      points: [
+        GlobeGeoPoint(31, 36),
+        GlobeGeoPoint(28, 47),
+        GlobeGeoPoint(25, 56),
+        GlobeGeoPoint(18, 58),
+        GlobeGeoPoint(12, 52),
+        GlobeGeoPoint(16, 43),
+        GlobeGeoPoint(23, 38),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'India',
+      region: GlobeRegion.asia,
+      points: [
+        GlobeGeoPoint(31, 68),
+        GlobeGeoPoint(29, 78),
+        GlobeGeoPoint(25, 88),
+        GlobeGeoPoint(20, 91),
+        GlobeGeoPoint(13, 83),
+        GlobeGeoPoint(7, 77),
+        GlobeGeoPoint(11, 73),
+        GlobeGeoPoint(19, 72),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Southeast Asia',
+      region: GlobeRegion.asia,
+      points: [
+        GlobeGeoPoint(21, 96),
+        GlobeGeoPoint(18, 106),
+        GlobeGeoPoint(10, 109),
+        GlobeGeoPoint(2, 103),
+        GlobeGeoPoint(6, 96),
+        GlobeGeoPoint(14, 94),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Japan',
+      region: GlobeRegion.asia,
+      points: [
+        GlobeGeoPoint(45, 141),
+        GlobeGeoPoint(41, 143),
+        GlobeGeoPoint(37, 140),
+        GlobeGeoPoint(34, 136),
+        GlobeGeoPoint(31, 131),
+        GlobeGeoPoint(34, 130),
+        GlobeGeoPoint(39, 136),
+      ],
+    ),
+    GlobeMapPolygon(
+      name: 'Australia',
+      region: GlobeRegion.oceania,
+      points: [
+        GlobeGeoPoint(-11, 113),
+        GlobeGeoPoint(-15, 124),
+        GlobeGeoPoint(-13, 137),
+        GlobeGeoPoint(-18, 146),
+        GlobeGeoPoint(-27, 153),
+        GlobeGeoPoint(-36, 149),
+        GlobeGeoPoint(-39, 141),
+        GlobeGeoPoint(-35, 124),
+        GlobeGeoPoint(-28, 114),
+        GlobeGeoPoint(-19, 112),
+      ],
+    ),
+  ];
+
+  static const GlobeMapPolygon turkeyRegion = GlobeMapPolygon(
+    name: 'Turkey',
+    region: GlobeRegion.turkey,
+    points: [
+      GlobeGeoPoint(42.1, 26.0),
+      GlobeGeoPoint(41.5, 30.4),
+      GlobeGeoPoint(40.9, 35.6),
+      GlobeGeoPoint(41.3, 41.8),
+      GlobeGeoPoint(39.5, 44.6),
+      GlobeGeoPoint(37.2, 42.5),
+      GlobeGeoPoint(36.2, 36.2),
+      GlobeGeoPoint(36.7, 30.0),
+      GlobeGeoPoint(38.7, 26.1),
+    ],
+  );
+
+  static const List<GlobeMapLine> countryBorders = [
+    GlobeMapLine(
+      name: 'Turkey north ridge',
+      region: GlobeRegion.turkey,
+      points: [
+        GlobeGeoPoint(41.3, 26.7),
+        GlobeGeoPoint(40.9, 31.0),
+        GlobeGeoPoint(40.4, 36.4),
+        GlobeGeoPoint(40.9, 42.1),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Turkey south ridge',
+      region: GlobeRegion.turkey,
+      points: [
+        GlobeGeoPoint(36.8, 29.0),
+        GlobeGeoPoint(38.1, 34.2),
+        GlobeGeoPoint(37.2, 39.3),
+        GlobeGeoPoint(38.4, 44.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Iberia France',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(43.5, -8.5),
+        GlobeGeoPoint(43.0, -1.5),
+        GlobeGeoPoint(42.5, 2.5),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'France Germany Italy',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(51.0, 2.0),
+        GlobeGeoPoint(48.5, 7.5),
+        GlobeGeoPoint(46.0, 10.0),
+        GlobeGeoPoint(43.0, 12.5),
+        GlobeGeoPoint(40.0, 15.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Central Europe',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(54.5, 14.5),
+        GlobeGeoPoint(50.0, 14.0),
+        GlobeGeoPoint(47.5, 19.5),
+        GlobeGeoPoint(45.0, 23.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Alps Balkans',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(47.5, 6.0),
+        GlobeGeoPoint(46.0, 12.0),
+        GlobeGeoPoint(44.5, 18.0),
+        GlobeGeoPoint(42.5, 24.0),
+        GlobeGeoPoint(40.5, 28.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Eastern Europe',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(57.0, 25.0),
+        GlobeGeoPoint(52.0, 28.0),
+        GlobeGeoPoint(48.0, 31.0),
+        GlobeGeoPoint(44.5, 35.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Scandinavia spine',
+      region: GlobeRegion.europe,
+      points: [
+        GlobeGeoPoint(69.0, 21.0),
+        GlobeGeoPoint(65.0, 18.0),
+        GlobeGeoPoint(61.0, 15.0),
+        GlobeGeoPoint(58.0, 12.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'North Africa',
+      region: GlobeRegion.africa,
+      points: [
+        GlobeGeoPoint(31.0, -10.0),
+        GlobeGeoPoint(29.0, 2.0),
+        GlobeGeoPoint(27.0, 14.0),
+        GlobeGeoPoint(25.0, 28.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'West Africa',
+      region: GlobeRegion.africa,
+      points: [
+        GlobeGeoPoint(20.0, -16.0),
+        GlobeGeoPoint(13.0, -4.0),
+        GlobeGeoPoint(7.0, 5.0),
+        GlobeGeoPoint(4.0, 15.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'East Africa',
+      region: GlobeRegion.africa,
+      points: [
+        GlobeGeoPoint(12.0, 36.0),
+        GlobeGeoPoint(4.0, 33.0),
+        GlobeGeoPoint(-7.0, 35.0),
+        GlobeGeoPoint(-18.0, 31.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Sahel curve',
+      region: GlobeRegion.africa,
+      points: [
+        GlobeGeoPoint(16.0, -16.0),
+        GlobeGeoPoint(14.0, -3.0),
+        GlobeGeoPoint(12.0, 12.0),
+        GlobeGeoPoint(10.0, 28.0),
+        GlobeGeoPoint(11.0, 39.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Middle East',
+      region: GlobeRegion.middleEast,
+      points: [
+        GlobeGeoPoint(35.0, 36.0),
+        GlobeGeoPoint(31.0, 42.0),
+        GlobeGeoPoint(27.0, 47.0),
+        GlobeGeoPoint(24.0, 55.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Arabian interior',
+      region: GlobeRegion.middleEast,
+      points: [
+        GlobeGeoPoint(29.0, 39.0),
+        GlobeGeoPoint(24.0, 45.0),
+        GlobeGeoPoint(20.0, 50.0),
+        GlobeGeoPoint(16.0, 55.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Caucasus Mesopotamia',
+      region: GlobeRegion.middleEast,
+      points: [
+        GlobeGeoPoint(41.0, 41.0),
+        GlobeGeoPoint(37.0, 43.0),
+        GlobeGeoPoint(34.0, 45.0),
+        GlobeGeoPoint(31.0, 47.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Central Asia',
+      region: GlobeRegion.asia,
+      points: [
+        GlobeGeoPoint(49.0, 45.0),
+        GlobeGeoPoint(45.0, 61.0),
+        GlobeGeoPoint(43.0, 78.0),
+        GlobeGeoPoint(47.0, 91.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'India north',
+      region: GlobeRegion.asia,
+      points: [
+        GlobeGeoPoint(31.0, 70.0),
+        GlobeGeoPoint(31.0, 78.0),
+        GlobeGeoPoint(28.0, 88.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'China south',
+      region: GlobeRegion.asia,
+      points: [
+        GlobeGeoPoint(28.0, 92.0),
+        GlobeGeoPoint(27.0, 104.0),
+        GlobeGeoPoint(23.0, 113.0),
+        GlobeGeoPoint(20.0, 121.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'East Asia coast interior',
+      region: GlobeRegion.asia,
+      points: [
+        GlobeGeoPoint(44.0, 124.0),
+        GlobeGeoPoint(39.0, 118.0),
+        GlobeGeoPoint(34.0, 113.0),
+        GlobeGeoPoint(29.0, 111.0),
+        GlobeGeoPoint(24.0, 106.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Siberia',
+      region: GlobeRegion.asia,
+      points: [
+        GlobeGeoPoint(58.0, 62.0),
+        GlobeGeoPoint(55.0, 86.0),
+        GlobeGeoPoint(56.0, 112.0),
+        GlobeGeoPoint(53.0, 136.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'US Canada',
+      region: GlobeRegion.northAmerica,
+      points: [
+        GlobeGeoPoint(49.0, -124.0),
+        GlobeGeoPoint(49.0, -110.0),
+        GlobeGeoPoint(48.5, -96.0),
+        GlobeGeoPoint(45.5, -84.0),
+        GlobeGeoPoint(45.0, -70.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'North America east',
+      region: GlobeRegion.northAmerica,
+      points: [
+        GlobeGeoPoint(46.0, -94.0),
+        GlobeGeoPoint(41.0, -88.0),
+        GlobeGeoPoint(36.0, -83.0),
+        GlobeGeoPoint(31.0, -81.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'US Mexico',
+      region: GlobeRegion.northAmerica,
+      points: [
+        GlobeGeoPoint(32.0, -117.0),
+        GlobeGeoPoint(31.5, -108.0),
+        GlobeGeoPoint(29.0, -101.0),
+        GlobeGeoPoint(26.0, -97.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Rockies',
+      region: GlobeRegion.northAmerica,
+      points: [
+        GlobeGeoPoint(56.0, -124.0),
+        GlobeGeoPoint(47.0, -114.0),
+        GlobeGeoPoint(38.0, -109.0),
+        GlobeGeoPoint(29.0, -105.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Central America',
+      region: GlobeRegion.northAmerica,
+      points: [
+        GlobeGeoPoint(18.0, -96.0),
+        GlobeGeoPoint(15.0, -90.0),
+        GlobeGeoPoint(12.0, -85.0),
+        GlobeGeoPoint(9.0, -80.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Andes',
+      region: GlobeRegion.southAmerica,
+      points: [
+        GlobeGeoPoint(8.0, -78.0),
+        GlobeGeoPoint(-8.0, -76.0),
+        GlobeGeoPoint(-20.0, -70.0),
+        GlobeGeoPoint(-36.0, -70.0),
+        GlobeGeoPoint(-50.0, -72.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'Brazil west',
+      region: GlobeRegion.southAmerica,
+      points: [
+        GlobeGeoPoint(4.0, -62.0),
+        GlobeGeoPoint(-8.0, -60.0),
+        GlobeGeoPoint(-18.0, -58.0),
+        GlobeGeoPoint(-28.0, -54.0),
+      ],
+    ),
+    GlobeMapLine(
+      name: 'South America east',
+      region: GlobeRegion.southAmerica,
+      points: [
+        GlobeGeoPoint(-5.0, -45.0),
+        GlobeGeoPoint(-14.0, -48.0),
+        GlobeGeoPoint(-24.0, -52.0),
+        GlobeGeoPoint(-34.0, -58.0),
+      ],
+    ),
+  ];
+}
